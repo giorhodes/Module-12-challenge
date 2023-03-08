@@ -26,42 +26,66 @@ const appMen = () => {
 
 
     function addEngineer(){
-        
-    }
-
-
-    function createTeam (){
         inquirer.prompt([
             {
-                type: "list",
-                name: "memberChoice",
-                message: "What is the team member would you like to add?"
-                choices: [
-"Engineer",
-"Intern",
-"I dont want to add any more members"
-
-            
-                ]
+                type: "input",
+                name: "engineerName",
+                message: "What is your engineer name"
+            }, // added comma here
+    
+            {
+                type: "input",
+                name: "engineerId",
+                message: "What is your engineer id"
+            }, // added comma here
+    
+            {
+                type: "input",
+                name: "engineerEmail",
+                message: "What is your engineer email"
+            }, // added comma here
+    
+            {
+                type: "input",
+                name: "engineerGithub",
+                message: "What is your engineer github"
             }
-
-
-        ]).then(userChoice => {
-if(userChoice.memberChoice === "intern") {
-    //add engineer
-
-} else if (userChoice.memberChoice === "intern") {
-    // add intern
-} else {
-    // build team function
-}
-
-
-        })
+        ]).then(answers => {
+            const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
+            teamMembers.push(engineer);
+            idList.push(answers.engineerId);
+            createTeam();
+        });
     }
+    
 
 
-
+ffunction createTeam() {
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "teamMember",
+          message: "Which type of team member would you like to add?",
+          choices: ["Engineer", "Intern", "I don't want to add any more team members"]
+        }
+      ])
+      .then(response => {
+        switch (response.teamMember) {
+          case "Engineer":
+            createEngineer();
+            break;
+          case "Intern":
+            createIntern();
+            break;
+          default:
+            console.log("Your team is complete!");
+            console.log(teamArray);
+            break;
+        }
+      });
+  }
+  
 
     function createManager() {
         console.log("please build your team");
