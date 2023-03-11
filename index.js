@@ -14,113 +14,122 @@ const idList = [];
 const teamMembers = [];
 
 const appMen = () => {
+  function buildTeam() {}
 
-    function buildTeam(){
-        
-    }
+  function addInter() {}
 
+  function addEngineer() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "engineerName",
+          message: "What is your engineer name",
+        },
+        {
+          type: "input",
+          name: "engineerId",
+          message: "What is your engineer id",
+        },
+        {
+          type: "input",
+          name: "engineerEmail",
+          message: "What is your engineer email",
+        },
+        {
+          type: "input",
+          name: "engineerGithub",
+          message: "What is your engineer github",
+        },
+      ])
+      .then((answers) => {
+        const engineer = new Engineer(
+          answers.engineerName,
+          answers.engineerId,
+          answers.engineerEmail,
+          answers.engineerGithub
+        );
+        teamMembers.push(engineer);
+        idList.push(answers.engineerId);
+        createTeam();
+      });
+  }
 
-    function addInter(){
-        
-    }
-
-
-    function addEngineer(){
-        inquirer.prompt([
-            {
-                type: "input",
-                name: "engineerName",
-                message: "What is your engineer name"
-            }, // added comma here
-    
-            {
-                type: "input",
-                name: "engineerId",
-                message: "What is your engineer id"
-            }, // added comma here
-    
-            {
-                type: "input",
-                name: "engineerEmail",
-                message: "What is your engineer email"
-            }, // added comma here
-    
-            {
-                type: "input",
-                name: "engineerGithub",
-                message: "What is your engineer github"
-            }
-        ]).then(answers => {
-            const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
-            teamMembers.push(engineer);
-            idList.push(answers.engineerId);
-            createTeam();
-        });
-    }
-    
-function createTeam() {
+  function createTeam() {
     inquirer
       .prompt([
         {
           type: "list",
           name: "teamMember",
           message: "Which type of team member would you like to add?",
-          choices: ["Engineer", "Intern", "I don't want to add any more team members"]
-        }
+          choices: [
+            "Engineer",
+            "Intern",
+            "I don't want to add any more team members",
+          ],
+        },
       ])
-      .then(response => {
+      .then((response) => {
         switch (response.teamMember) {
           case "Engineer":
-            createEngineer();
+            addEngineer();
             break;
           case "Intern":
-            createIntern();
+            addInter();
             break;
           default:
             console.log("Your team is complete!");
-            console.log(teamArray);
+            console.log(teamMembers);
             break;
         }
       });
   }
-  
 
-    function createManager() {
-        console.log("please build your team");
-       inquirer.prompt([
-            {
-                type: "input",
-                name: "managerName",
-                message: "What is the team manager's name?",
-                validate: answer => {
-                    if (answer !== "") {
-                        return true;
-                    }
-                    return "Please enter at least one character";
-                }
-            },
-            {
-                type: "input",
-                name: "managerID",
-                message: "What is the team manager's ID?"
-            },
-            {
-                type: "input",
-                name: "managerEmail",
-                message: "What is the team manager's email?"
-            },
-            {
-                type: "input",
-                name: "managerOfficeNumber",
-                message: "What is the team manager's office number?"
+  function createManager() {
+    console.log("Please build your team.");
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "managerName",
+          message: "What is the team manager's name?",
+          validate: (answer) => {
+            if (answer !== "") {
+              return true;
             }
-        ]).then(answers => {
-            const manager = new Manager(answers.managerName, answers.managerID, answers.managerEmail, answers.managerOfficeNumber);
-            teamMembers.push(manager);
-            idList.push(answers.managerID);
-            createReadStream();
-        });
-    }
+            return "Please enter at least one character.";
+          },
+        },
+        {
+          type: "input",
+          name: "managerID",
+          message: "What is the team manager's ID?",
+        },
+        {
+          type: "input",
+          name: "managerEmail",
+          message: "What is the team manager's email?",
+        },
+        {
+          type: "input",
+          name: "managerOfficeNumber",
+          message: "What is the team manager's office number?",
+        },
+      ])
+      .then((answers) => {
+        const manager = new Manager(
+          answers.managerName,
+          answers.managerID,
+          answers.managerEmail,
+          answers.managerOfficeNumber
+        );
+        teamMembers.push(manager);
+        idList.push(answers.managerID);
+        createTeam();
+      });
+  }
 
-    createManager();
+  createManager();
 };
+
+appMen();
