@@ -58,9 +58,7 @@ const appMen = () => {
         });
     }
     
-
-
-ffunction createTeam() {
+function createTeam() {
     inquirer
       .prompt([
         {
