@@ -5,7 +5,7 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-const OUTPUT_DIR = path.resolve(__dirname, "output");
+const OUTPUT_DIR = path.resolve(__dirname, "dist");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./src/page-template.js");
@@ -13,10 +13,51 @@ const render = require("./src/page-template.js");
 const idList = [];
 const teamMembers = [];
 
-const appMen = () => {
-  function buildTeam() {}
+const appMenu = () => {
+  function buildTeam() {
+    if (!fs.existsSync(OUTPUT_DIR)) {
+      fs.mkdirSync(OUTPUT_DIR);
+    }
+    fs.writeFileSync(outputPath, render(teamMembers), 'utf-8');
+  }
+  
 
-  function addInter() {}
+  function addIntern() {
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "internName",
+          message: "What is your intern name",
+        },
+        {
+          type: "input",
+          name: "internId",
+          message: "What is your intern id",
+        },
+        {
+          type: "input",
+          name: "internEmail",
+          message: "What is your intern email",
+        },
+        {
+          type: "input",
+          name: "internSchool",
+          message: "What is your intern school",
+        },
+      ])
+      .then((answers) => {
+        const intern = new Intern(
+          answers.internName,
+          answers.internId,
+          answers.internEmail,
+          answers.internSchool
+        );
+        teamMembers.push(intern);
+        idList.push(answers.internId);
+        createTeam();
+      });
+  }
 
   function addEngineer() {
     inquirer
@@ -75,16 +116,17 @@ const appMen = () => {
             addEngineer();
             break;
           case "Intern":
-            addInter();
+            addIntern();
             break;
           default:
             console.log("Your team is complete!");
             console.log(teamMembers);
+            buildTeam();
             break;
         }
       });
   }
-
+  
   function createManager() {
     console.log("Please build your team.");
     inquirer
@@ -132,4 +174,4 @@ const appMen = () => {
   createManager();
 };
 
-appMen();
+appMenu();
